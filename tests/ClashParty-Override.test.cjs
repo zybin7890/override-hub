@@ -118,22 +118,26 @@ const checks = [
         assert.deepEqual(o['proxy-groups'].find(g=>g.name==='谷歌服务').proxies,['SG出口']);
     }],
     ['五个 AI 策略组独立分流，Gemini 优先于 Google 泛规则',()=>{
-        const c=base();c.rules=['DOMAIN,perplexity.example,AI'];
+        const c=base();c.rules=['DOMAIN,perplexity.example,AI','DOMAIN,av.example,av'];
+        c['proxy-groups']=[{name:'av',type:'select',proxies:['DIRECT']}];
         const o=run(c);
         const sites={GPT:'chatgpt.com',Gemini:'gemini.google.com',Grok:'grok.com',Claude:'claude.ai',muse:'muse.ai'};
-        const icons={GPT:'ChatGPT',Gemini:'Gemini',Grok:'Grok',Claude:'Claude',muse:'Meta'};
+        const icons={GPT:'ChatGPT',Gemini:'Gemini',Claude:'Claude',muse:'Meta'};
+        const grokIcon='https://raw.githubusercontent.com/zybin7890/override-hub/main/icons/Grok-Light.svg';
         const google=o.rules.indexOf('GEOSITE,google,SG出口');
         for(const [group,domain] of Object.entries(sites)){
             const selector=o['proxy-groups'].find(g=>g.name===group);
             assert.equal(selector.type,'select');
-            assert(selector.icon.endsWith(`/icon/svg/common/${icons[group]}.svg`));
+            if(group==='Grok') assert.equal(selector.icon,grokIcon);
+            else assert(selector.icon.endsWith(`/icon/svg/common/${icons[group]}.svg`));
             const index=o.rules.indexOf(`DOMAIN-SUFFIX,${domain},${group}`);
             assert(index>=0 && index<google);
         }
         assert(!o['proxy-groups'].some(g=>g.name==='AI'));
         assert(o.rules.includes('DOMAIN,perplexity.example,节点选择'));
         assert(o.proxies.find(p=>p.name.includes('JP')).icon.endsWith('/icon/svg/flag/Japan.svg'));
-        assert([...o.proxies,...o['proxy-groups']].every(item=>
+        assert.equal(o['proxy-groups'].find(g=>g.name==='av').icon,'https://fastly.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f51e.svg');
+        assert([...o.proxies,...o['proxy-groups']].filter(item=>!['Grok','av'].includes(item.name)).every(item=>
             item.icon.startsWith('https://raw.githubusercontent.com/aaANDkk/Qure_Style_SVG/') && item.icon.endsWith('.svg')));
     }],
     ['端口与已有TUN设置保留',()=>{

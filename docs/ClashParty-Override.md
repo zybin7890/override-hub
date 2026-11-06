@@ -10,7 +10,7 @@ Mihomo 覆写入口 `main(config, runtimeMode)`，适用于 Clash Party / Clash 
 - Google 一般流量与 `category-porn` 进入仅含自用 SG 三节点的 `SG出口`。此组缺少 SG 时使用 REJECT。`谷歌服务` 与 `av` 策略组也仅可选择 SG出口。
 - YouTube 优先匹配到只含新 JP VLESS/HY2 的 `JP出口`，规则位于 Google 之前，避免被 Google 集合或谷歌服务组带到 SG。JP 节点没有 dialer-proxy，不经过 SG，也没有其他地区或 DIRECT 回退。
 - `GPT`、`Gemini`、`Grok`、`Claude`、`muse` 各有独立的节点选择组。专用域名先于 Google 泛规则匹配。其余国外 AI 走 `节点选择`。
-- 节点和策略组使用 [Qure Style SVG](https://github.com/aaANDkk/Qure_Style_SVG)。`muse` 使用 Meta 图标，地区节点使用对应旗帜。
+- 节点和策略组使用 [Qure Style SVG](https://github.com/aaANDkk/Qure_Style_SVG)。`muse` 使用 Meta 图标，地区节点使用对应旗帜。Grok 使用浅色版，`av` 使用 Twemoji 🔞。
 
 这些是作者指定的个人节点及出口策略，不是通用地区默认值。节点认证信息仍由用户的订阅提供；仓库没有 UUID、真实节点密码、私钥、订阅令牌或私人生成配置。代码中的端点公钥及证书指纹用于验证服务器身份，不是私钥。
 

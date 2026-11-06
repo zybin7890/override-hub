@@ -167,7 +167,7 @@ const AI_SERVICES = {
         ]
     },
     Grok : {
-        icon : "common/Grok.svg",
+        icon : "https://raw.githubusercontent.com/zybin7890/override-hub/main/icons/Grok-Light.svg",
         geosite : "xai",
         domains : [
             "grok.com",
@@ -584,7 +584,7 @@ function selectGroup ( name, proxies, icon, includeAll )
         type : "select",
         proxies : unique ( proxies ),
         "store-selected" : true,
-        icon : ICON_BASE + icon
+        icon : icon.startsWith( "https://" ) ? icon : ICON_BASE + icon
     };
 
     if ( includeAll )
@@ -778,13 +778,14 @@ function configureGroups ( config, sourceGroups, renamed )
         retaining.add( name );
         const group = clone ( sourceMap.get( name ) );
         const icons = {
-            "av" : "common/Lock.svg",
+            "av" : "https://fastly.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f51e.svg",
             "JP出口" : "flag/Japan.svg",
             "SG出口" : "flag/Singapore.svg",
             "url-test" : "common/Auto.svg",
             "fallback" : "common/LinkCube.svg"
         };
-        group.icon = ICON_BASE + ( icons[ name ] || icons[ group.type ] || "common/Proxy.svg" );
+        const icon = icons[ name ] || icons[ group.type ] || "common/Proxy.svg";
+        group.icon = icon.startsWith( "https://" ) ? icon : ICON_BASE + icon;
         group.proxies = unique ( ( group.proxies || [] ).map( function ( member )
         {
                             return renamed.get( member ) || renameGroup ( member );
