@@ -20,7 +20,7 @@ const DNS_FOREIGN = [
     "https://1.1.1.1/dns-query#DNS代理",
     "https://8.8.8.8/dns-query#DNS代理"
 ];
-const ICON_BASE = "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
+const ICON_BASE = "https://raw.githubusercontent.com/aaANDkk/Qure_Style_SVG/449f2449d312c4e06a655aca59bcd7cd766678bc/icon/svg/";
 
 const NODE_EXCLUDE = "(?i)(香港|港|Hong[ _-]*Kong|(?:^|[^A-Za-z])HK\\d*(?:[^A-Za-z]|$)|" +
                      "官网|到期|^剩余|流量|套餐|重置|过期|失效|维护|订阅|倍率|" +
@@ -32,33 +32,33 @@ const REGIONS = [
     {
         code : "SG",
         filter : "(?i)(新加坡|狮城|Singapore|Lion[ _-]*City|🇸🇬|(?:^|[^A-Za-z])SG\\d*(?:[^A-Za-z]|$))",
-        icon : "Singapore.png"
+        icon : "flag/Singapore.svg"
     },
     {
         code : "US",
         filter : "(?i)(美国|美國|United[ _-]*States|America|Los[ _-]*Angeles|San[ _-]*Jose|" +
                      "Seattle|Chicago|New[ _-]*York|Dallas|Ashburn|🇺🇸|(?:^|[^A-Za-z])(?:US|USA)\\d*(?:[^A-Za-z]|$))",
-        icon : "United_States.png"
+        icon : "flag/United_States.svg"
     },
     {
         code : "JP",
         filter : "(?i)(日本|Japan|Tokyo|Osaka|Nagoya|Sakura|🇯🇵|(?:^|[^A-Za-z])JP\\d*(?:[^A-Za-z]|$))",
-        icon : "Japan.png"
+        icon : "flag/Japan.svg"
     },
     {
         code : "TW",
         filter : "(?i)(台湾|台灣|Taiwan|Taipei|🇹🇼|(?:^|[^A-Za-z])TW\\d*(?:[^A-Za-z]|$))",
-        icon : "Taiwan.png"
+        icon : "flag/China_Taiwan.svg"
     },
     {
         code : "KR",
         filter : "(?i)(韩国|韓國|Korea|Seoul|🇰🇷|(?:^|[^A-Za-z])KR\\d*(?:[^A-Za-z]|$))",
-        icon : "Korea.png"
+        icon : "flag/South_Korea.svg"
     },
     {
         code : "PH",
         filter : "(?i)(菲律宾|菲律賓|Philippines|Manila|🇵🇭|(?:^|[^A-Za-z])PH\\d*(?:[^A-Za-z]|$))",
-        icon : "Philippines.png"
+        icon : "flag/Philippines.svg"
     }
 ];
 
@@ -71,23 +71,23 @@ const REGION_MATCHERS = REGIONS.map( function ( region )
 const SERVICES = [
     [
         "谷歌服务",
-        "Google_Search.png"
+        "common/Google.svg"
     ],
     [
         "微软服务",
-        "Microsoft.png"
+        "common/Microsoft.svg"
     ],
     [
         "苹果服务",
-        "Apple.png"
+        "common/Apple.svg"
     ],
     [
         "Spotify",
-        "Spotify.png"
+        "common/Spotify.svg"
     ],
     [
         "游戏平台",
-        "Game.png"
+        "common/Game.svg"
     ]
 ];
 
@@ -121,6 +121,7 @@ const FAKE_IP_FILTER = [
 
 const AI_SERVICES = {
     GPT : {
+        icon : "common/ChatGPT.svg",
         geosite : "openai",
         domains : [
             "chatgpt.com",
@@ -135,6 +136,7 @@ const AI_SERVICES = {
         ]
     },
     Gemini : {
+        icon : "common/Gemini.svg",
         geosite : "google-gemini",
         domains : [
             "gemini.google.com",
@@ -165,6 +167,7 @@ const AI_SERVICES = {
         ]
     },
     Grok : {
+        icon : "common/Grok.svg",
         geosite : "xai",
         domains : [
             "grok.com",
@@ -172,6 +175,7 @@ const AI_SERVICES = {
         ]
     },
     Claude : {
+        icon : "common/Claude.svg",
         geosite : "anthropic",
         domains : [
             "anthropic.com",
@@ -182,6 +186,7 @@ const AI_SERVICES = {
         ]
     },
     muse : {
+        icon : "common/Meta.svg",
         domains : [
             "muse.ai"
         ]
@@ -389,7 +394,7 @@ function setNodeIcon ( proxy )
         }
     }
 
-    proxy.icon = ICON_BASE + "Proxy.png";
+    proxy.icon = ICON_BASE + "common/Proxy.svg";
 }
 
 function configureNodes ( config )
@@ -641,11 +646,11 @@ function configureGroups ( config, sourceGroups, renamed )
             ...regionNames,
             "故障转移",
             "DIRECT"
-        ], "Proxy.png", true ),
-        healthGroup ( "自动选择", "url-test", "Auto.png", null, false, hasOtherNodes ),
-        healthGroup ( "故障转移", "fallback", "LinkCube.png", null, true, hasOtherNodes ),
+        ], "common/Proxy.svg", true ),
+        healthGroup ( "自动选择", "url-test", "common/Auto.svg", null, false, hasOtherNodes ),
+        healthGroup ( "故障转移", "fallback", "common/LinkCube.svg", null, true, hasOtherNodes ),
         ...[
-            ...Object.keys( AI_SERVICES ).map( name => [ name, "Bot.png" ] ),
+            ...Object.entries( AI_SERVICES ).map( ( [ name, service ] ) => [ name, service.icon ] ),
             ...SERVICES
         ].map( function ( service )
         {
@@ -663,12 +668,12 @@ function configureGroups ( config, sourceGroups, renamed )
             "自动选择",
             "故障转移",
             "DIRECT"
-        ], "Final.png", false ),
+        ], "common/Final.svg", false ),
         selectGroup ( "DNS代理", [
             "自动选择"
-        ], "DNS.png", false ),
-        healthGroup ( "SG出口", "url-test", "Singapore.png", null, false, false ),
-        healthGroup ( "JP出口", "url-test", "Japan.png", null, false, false ),
+        ], "common/Server.svg", false ),
+        healthGroup ( "SG出口", "url-test", "flag/Singapore.svg", null, false, false ),
+        healthGroup ( "JP出口", "url-test", "flag/Japan.svg", null, false, false ),
         ...regions.map( function ( region )
         {
             return healthGroup ( region.code + "自动选择", "url-test", region.icon, region.filter, false, false );
@@ -772,6 +777,14 @@ function configureGroups ( config, sourceGroups, renamed )
 
         retaining.add( name );
         const group = clone ( sourceMap.get( name ) );
+        const icons = {
+            "av" : "common/Lock.svg",
+            "JP出口" : "flag/Japan.svg",
+            "SG出口" : "flag/Singapore.svg",
+            "url-test" : "common/Auto.svg",
+            "fallback" : "common/LinkCube.svg"
+        };
+        group.icon = ICON_BASE + ( icons[ name ] || icons[ group.type ] || "common/Proxy.svg" );
         group.proxies = unique ( ( group.proxies || [] ).map( function ( member )
         {
                             return renamed.get( member ) || renameGroup ( member );
